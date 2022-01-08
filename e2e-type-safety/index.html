@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Title</title>
+  <meta charset="utf-8">
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Fira+Code:400,700,400italic);
+    @import url(https://fonts.googleapis.com/css?family=Inter:400,700,400italic);
+    @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+
+    body {
+      font-family: 'Inter';
+      color: #212427e5
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-size: 0.875rem;
+      font-weight: normal;
+    }
+
+    .remark-code,
+    .remark-inline-code {
+      background-color: #E6FFFA;
+      color: #319795
+    }
+
+    code {
+      font-family: 'Fira Code';
+    }
+
+    .prisma-background {
+      background-color: #232b3a;
+      color: rgba(255, 255, 255, 0.900);
+    }
+
+    .code-word {
+      font-family: 'Fira Code';
+      background-color: #E6FFFA;
+      color: #319795
+    }
+  </style>
+</head>
+
+<body>
+  <textarea id="source">
+
+class: center, middle, hljs-monokai
+
+# End to end type safety
+<h3 style="color: gray">Abdallah (@aabedraba)</h3>
+
+---
+
+class: middle, prisma-background
+
+# What is end to end type safety?
+
+---
+
+class: middle, center
+
+### Safety on .code-word[Database -> API] contract
+
+### Safety on .code-word[API -> Frontend] contract
+
+---
+
+class: middle, center
+
+# Does that tightly couple
+# backend with frontend?
+## 🤔
+
+<!-- 
+  -Security vurnerability!
+    - Some frameworks don't allow this
+  -Different teams
+-->
+---
+
+class: middle, center
+
+# Does that tightly couple <br> backend with frontend?
+---
+
+class: middle, center
+
+# Types are just... types 🤷🏽‍♂️
+
+---
+
+class: middle, center
+
+# Good API practices
+
+---
+
+class: middle, center
+
+# Catching errors early 
+# is a powerful tradeof
+
+---
+
+class: center middle prisma-background
+
+<img src="tell-me-more.jpeg" /> 
+
+---
+
+class: middle prisma-background
+
+# How do we achieve that?
+
+---
+
+class: middle, centerw
+
+### Safety on .code-word[Database -> API] contract
+
+---
+
+class: middle, center
+
+<img style="max-height: 100px;" src="prisma.svg"/>
+
+<!--
+
+-->
+---
+
+class: remark-code
+
+// prisma.schema
+
+<pre style="font-family: Fira Code;">
+<b>model User {</b>
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  posts     <b>Post[]</b>
+<b>}</b>
+
+<b>model Post {</b>
+  id        Int      @id @default(autoincrement())
+  published Boolean  @default(false)
+  author    <b>User</b>?    @relation(fields: [authorId], references: [id])
+  authorId  Int?
+<b>}</b>
+
+</pre>
+
+---
+
+class: middle, centerw
+
+### Safety on .code-word[API -> Frontend] contract
+
+---
+
+class: center, middle
+
+### <img src="graphql.svg" style="max-height: 50px;"/> GraphQL 🤝 Codegen
+
+---
+
+class: remark-code
+
+// GraphQL schema
+```
+type User {
+  id: ID!
+  email: String!
+  posts(findTitle: String): [Post]
+}
+
+type Post {
+  id: ID!
+  title: String!
+  user: User!
+}
+
+type Query {
+  posts: [Post]
+}
+```
+
+---
+class: remark-code
+
+// Generated types
+
+```
+export type Maybe<T> = T | null
+export type InputMaybe<T> = Maybe<T>
+
+export type User = {
+  __typename?: 'User'
+  id: Scalars['Int']
+  email: Scalars['String']
+  posts?: Maybe<Array<Maybe<Post>>>
+}
+
+export type UserPostsArgs = {
+  findTitle?: InputMaybe<Scalars['String']>
+}
+
+export type Post = {
+  __typename?: 'Post'
+  id: Scalars['Int']
+  title: Scalars['String']
+  user: User
+}
+
+...
+```
+
+---
+class: prisma-background, center, middle
+
+<img src="demo-time-uh.jpeg"/>
+
+    </textarea>
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+  </script>
+  <script>
+    var slideshow = remark.create();
+  </script>
+</body>
+
+</html>
