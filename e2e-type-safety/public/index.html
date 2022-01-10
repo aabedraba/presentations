@@ -168,14 +168,15 @@ class: remark-code
 <b>model User {</b>
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  name      String?
-  posts     <b>Post[]</b>
+  username  String?
+  tweets    <b>Tweet[]</b>
 <b>}</b>
 
-<b>model Post {</b>
-  id        Int      @id @default(autoincrement())
-  published Boolean  @default(false)
-  author    <b>User</b>?    @relation(fields: [authorId], references: [id])
+<b>model Tweet {</b>
+  id        Int       @id @default(autoincrement())
+  content   Text
+  createdAt DateTime  @default(now())
+  author    <b>User</b>?     @relation(fields: [authorId], references: [id])
   authorId  Int?
 <b>}</b>
 
@@ -219,17 +220,18 @@ class: remark-code
 type User {
   id: ID!
   email: String!
-  posts(findTitle: String): [Post]
+  tweets: [Tweet]
 }
 
-type Post {
+type Tweet {
   id: ID!
-  title: String!
-  user: User!
+  content: String!
+  date: String!
+  user: User
 }
 
 type Query {
-  posts: [Post]
+  tweets: [Tweet]
 }
 ```
 
@@ -246,17 +248,14 @@ export type User = {
   __typename?: 'User'
   id: Scalars['Int']
   email: Scalars['String']
-  posts?: Maybe<Array<Maybe<Post>>>
+  tweets?: Maybe<Array<Maybe<Tweet>>>
 }
 
-export type UserPostsArgs = {
-  findTitle?: InputMaybe<Scalars['String']>
-}
-
-export type Post = {
-  __typename?: 'Post'
+export type Tweet = {
+  __typename?: 'Tweet'
   id: Scalars['Int']
-  title: Scalars['String']
+  content: Scalars['String']
+  date: Scalars['String']
   user: User
 }
 
