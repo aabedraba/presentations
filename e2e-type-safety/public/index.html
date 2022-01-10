@@ -62,9 +62,29 @@ class: middle, prisma-background
 
 class: middle, center
 
-### Safety on .code-word[Database -> API] contract
+## .code-word[Database <-> API <-> Client]
 
-### Safety on .code-word[API -> Frontend] contract
+---
+
+class: middle, center
+
+## Catching 🐞s all the way to the client and back
+---
+
+class: middle, center
+
+## Developer Experience
+-autocomplete
+
+-propagating changes
+
+---
+
+class: middle, center
+
+### Safety on .code-word[Database <-> API] contract
+
+### Safety on .code-word[API <-> Frontend] contract
 
 ---
 
@@ -72,6 +92,14 @@ class: middle, center
 
 # Does that tightly couple <br> backend with frontend?
 ## 🤔
+
+---
+
+class: middle, center
+
+##-security vulnerabilities
+
+##-what about separate teams?
 
 <!-- 
   -Security vurnerability!
@@ -134,7 +162,7 @@ class: middle, center
 
 class: remark-code
 
-// prisma.schema
+<b>// prisma.schema</b>
 
 <pre style="font-family: Fira Code;">
 <b>model User {</b>
@@ -154,6 +182,23 @@ class: remark-code
 </pre>
 
 ---
+class: remark-code
+
+<b>// Example query</b>
+
+```
+prisma.user.findMany({
+  select: {
+    id: true,
+    name: true,
+  },
+  where: {
+    email: "ada@lovelace.her",
+  },
+});
+```
+
+---
 
 class: middle, centerw
 
@@ -169,7 +214,7 @@ class: center, middle
 
 class: remark-code
 
-// GraphQL schema
+<b>// GraphQL schema</b>
 ```
 type User {
   id: ID!
@@ -191,7 +236,7 @@ type Query {
 ---
 class: remark-code
 
-// Generated types
+<b>// Generated types</b>
 
 ```
 export type Maybe<T> = T | null
